@@ -49,3 +49,31 @@ class Agent:
         #Agent 클래스의 상태
         self.ratio_hold = 0 #주식 보유 비율
         self.ratio_portfolio_value = 0 #포트폴리오 가치 비율
+    
+    def reset(self):
+        self.balance = self.initial_balance
+        self.num_stocks = 0
+        self.portfolio_value = self.initial_balance
+        self.base_portfolio_value = self.initial_balance
+        self.num_buy = 0
+        self.num_sell = 0
+        self.num_hold = 0
+        self.immediate_reward = 0
+        self.ratio_hold = 0
+        self.ratio_portfolio_value = 0
+    
+    def reset_exploration(self):
+        self.exploration_base = 0.5 + np.random.rand() / 2
+    
+    def set_balance(self, balance):
+        self.initial_balance = balance
+    
+    def get_states(self):
+        self.ratio_hold = self.num_stocks / int(self.portfolio_value / self.environment.get_price())
+        self.ratio_portfolio_value = (self.portfolio_value / self.base_portfolio_value)
+
+        return (
+            self.ratio_hold,
+            self.ratio_portfolio_value
+        )
+    
