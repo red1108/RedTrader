@@ -40,10 +40,12 @@ class Network:
 
 
 
-class DNN(Network):
-    def __init__(self):
+class DNN(keras.Model):
+    def __init__(self, activation):
         #keras.backend.set_floatx('float32')
         super().__init__()
+        self.activation = activation
+        
         self.dense1 = Dense(256, activation=self.activation,
                             kernal_initializer='random_normal')
         self.dense2 = Dense(128, activation=self.activation,

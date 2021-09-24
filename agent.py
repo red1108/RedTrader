@@ -221,5 +221,5 @@ class Agent:
                 delayed_reward = self.immediate_reward
             else :
                 delayed_reward = 0
-            
+              
             return self.immediate_reward, delayed_reward
