@@ -27,7 +27,9 @@ class Network:
         return self.model(sample).flatten()
 
     def train_on_batch(self, x, y):
-        loss = self.model.train_on_batch(x,y)
+        loss = 0.
+        history = self.model.fit(x, y, epochs=10, verbose=False)
+        loss += np.sum(history.history['loss'])
         return loss
 
     def save_model(self, model_path):
@@ -41,7 +43,7 @@ class Network:
 
 
 class DNN(keras.Model):
-    def __init__(self, activation):
+    def __init__(self, activation, output_dim):
         #keras.backend.set_floatx('float32')
         super().__init__()
         self.activation = activation
@@ -54,7 +56,7 @@ class DNN(keras.Model):
                             kernal_initializer='random_normal')
         self.dense4 = Dense(32, activation=self.activation,
                             kernal_initializer='random_normal')
-        self.dense5 = Dense(2, activation=self.activation,
+        self.dense5 = Dense(output_dim, activation=self.activation,
                             kernal_initializer='random_normal')
         self.drop1 = Dropout(0.1)
         self.drop2 = Dropout(0.1)
@@ -72,4 +74,6 @@ class DNN(keras.Model):
         x = self.drop4(x)
         x = self.dense5(x)
         return x
+
+
 

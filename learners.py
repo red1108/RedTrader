@@ -83,55 +83,11 @@ class ReinforcementLearner:
         # 로그 등 출력 경로
         self.output_path = output_path
 
-    def init_value_network(self, shared_network=None, 
-            activation='linear', loss='mse'):
-        if self.net == 'dnn':
-            self.value_network = DNN(
-                input_dim=self.num_features, 
-                output_dim=self.agent.NUM_ACTIONS, 
-                lr=self.lr, shared_network=shared_network, 
-                activation=activation, loss=loss)
-        elif self.net == 'lstm':
-            self.value_network = LSTMNetwork(
-                input_dim=self.num_features, 
-                output_dim=self.agent.NUM_ACTIONS, 
-                lr=self.lr, num_steps=self.num_steps, 
-                shared_network=shared_network, 
-                activation=activation, loss=loss)
-        elif self.net == 'cnn':
-            self.value_network = CNN(
-                input_dim=self.num_features, 
-                output_dim=self.agent.NUM_ACTIONS, 
-                lr=self.lr, num_steps=self.num_steps, 
-                shared_network=shared_network, 
-                activation=activation, loss=loss)
-        if self.reuse_models and os.path.exists(self.value_network_path):
-                self.value_network.load_model(model_path=self.value_network_path)
+    def init_value_network(self):
+        self.value_network = DNN(activation = 'sigmoid', output_dim = self.agent.NUM_ACTIONS)
 
-    def init_policy_network(self, shared_network=None, 
-            activation='sigmoid', loss='binary_crossentropy'):
-        if self.net == 'dnn':
-            self.policy_network = DNN(
-                input_dim=self.num_features, 
-                output_dim=self.agent.NUM_ACTIONS, 
-                lr=self.lr, shared_network=shared_network, 
-                activation=activation, loss=loss)
-        elif self.net == 'lstm':
-            self.policy_network = LSTMNetwork(
-                input_dim=self.num_features, 
-                output_dim=self.agent.NUM_ACTIONS, 
-                lr=self.lr, num_steps=self.num_steps, 
-                shared_network=shared_network, 
-                activation=activation, loss=loss)
-        elif self.net == 'cnn':
-            self.policy_network = CNN(
-                input_dim=self.num_features, 
-                output_dim=self.agent.NUM_ACTIONS, 
-                lr=self.lr, num_steps=self.num_steps, 
-                shared_network=shared_network, 
-                activation=activation, loss=loss)
-        if self.reuse_models and os.path.exists(self.policy_network_path):
-            self.policy_network.load_model(model_path=self.policy_network_path)
+    def init_policy_network(self):
+        self.value_network = DNN(activation = 'sigmoid', output_dim = self.agent.NUM_ACTIONS)
 
     def reset(self):
         self.sample = None
@@ -179,10 +135,10 @@ class ReinforcementLearner:
             loss = 0
             if y_value is not None:
                 # 가치 신경망 갱신
-                loss += self.value_network.train_on_batch(x, y_value)
+                loss += self.value_network.fit(x=x, y=y_value, verbos=0)
             if y_policy is not None:
                 # 정책 신경망 갱신
-                loss += self.policy_network.train_on_batch(x, y_policy)
+                loss += self.value_network.fit(x=x, y=y_policy, verbos=0)
             return loss
         return None
 
