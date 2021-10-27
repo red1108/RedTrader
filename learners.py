@@ -84,10 +84,10 @@ class ReinforcementLearner:
         self.output_path = output_path
 
     def init_value_network(self):
-        self.value_network = DNN(activation = 'sigmoid', output_dim = self.agent.NUM_ACTIONS)
+        self.value_network = DNN(activation = 'linear', output_dim = self.agent.NUM_ACTIONS)
 
     def init_policy_network(self):
-        self.value_network = DNN(activation = 'sigmoid', output_dim = self.agent.NUM_ACTIONS)
+        self.policy_network = DNN(activation = 'sigmoid', output_dim = self.agent.NUM_ACTIONS)
 
     def reset(self):
         self.sample = None
@@ -115,8 +115,9 @@ class ReinforcementLearner:
         self.batch_size = 0
         self.learning_cnt = 0
 
+    #학습데이터를 구성하는 샘플 하나를 생성함
     def build_sample(self):
-        self.environment.observe()
+        self.environment.observe() #차트의 다음 인덱스로 넘어감
         if len(self.training_data) > self.training_data_idx + 1:
             self.training_data_idx += 1
             self.sample = self.training_data.iloc[self.training_data_idx].tolist()
@@ -203,7 +204,9 @@ class ReinforcementLearner:
         else:
             for f in os.listdir(self.epoch_summary_dir):
                 os.remove(os.path.join(self.epoch_summary_dir, f))
-
+        
+        self.agent.set_balance(balance)
+        
         # 학습에 대한 정보 초기화
         max_portfolio_value = 0
         epoch_win_cnt = 0
