@@ -1,6 +1,3 @@
-#https://github.com/quantylab/rltrader/blob/master/visualizer.py
-#book 142p
-
 import threading
 import numpy as np
 import matplotlib.pyplot as plt

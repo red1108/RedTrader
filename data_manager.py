@@ -152,12 +152,13 @@ def load_data(code, date_from, date_to, ver='v2'):
 
 def load_data_v3(code, date_from, date_to):
     df = None
-    for filename in os.listdir('D:\\dev\\rltrader\\data\\v3'):
+    for filename in os.listdir('data\\v3'):
         if filename.startswith(code):
-            df = pd.read_csv(os.path.join('D:\\dev\\rltrader\\data\\v3', filename), thousands=',', header=0, converters={'date': lambda x: str(x)})
+            df = pd.read_csv(os.path.join('data\\v3', filename), thousands=',', header=0, converters={'date': lambda x: str(x)})
             break
 
     # 날짜 오름차순 정렬
+    print(df)
     df = df.sort_values(by='date').reset_index()
 
     # 표준화
