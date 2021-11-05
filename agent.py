@@ -148,7 +148,7 @@ class Agent:
         if not self.validate_action(action):
             action = Agent.ACTION_HOLD
 
-        # 환경에서 현재 가격 얻기
+        # 현재가격
         curr_price = self.environment.get_price()
 
         # 즉시 보상 초기화
@@ -158,17 +158,11 @@ class Agent:
         if action == Agent.ACTION_BUY:
             # 매수할 단위를 판단
             trading_unit = self.decide_trading_unit(confidence)
-            balance = (
-                    self.balance - curr_price * (1 + self.TRADING_CHARGE) * trading_unit
-            )
+            balance = (self.balance - curr_price * (1 + self.TRADING_CHARGE) * trading_unit)
             # 보유 현금이 모자랄 경우 보유 현금으로 가능한 만큼 최대한 매수
             if balance < 0:
                 trading_unit = max(
-                    min(
-                        int(self.balance / (
-                                curr_price * (1 + self.TRADING_CHARGE))),
-                        self.max_trading_unit
-                    ),
+                    min(int(self.balance / (curr_price * (1 + self.TRADING_CHARGE))),self.max_trading_unit),
                     self.min_trading_unit
                 )
             # 수수료를 적용하여 총 매수 금액 산정
@@ -184,7 +178,7 @@ class Agent:
         elif action == Agent.ACTION_SELL:
             # 매도할 단위를 판단
             trading_unit = self.decide_trading_unit(confidence)
-            # 보유 주식이 모자랄 경우 가능한 만큼 최대한 매도
+            # 모자라면 팔수 있는만큼 매도
             trading_unit = min(trading_unit, self.num_stocks)
             # 매도
             invest_amount = curr_price * (
@@ -202,8 +196,6 @@ class Agent:
 
         # 포트폴리오 가치 갱신
         self.portfolio_value = self.balance + curr_price * self.num_stocks
-        self.profitloss = (
-                (self.portfolio_value - self.initial_balance) / self.initial_balance
-        )
+        self.profitloss = ((self.portfolio_value - self.initial_balance) / self.initial_balance)
 
         return self.profitloss

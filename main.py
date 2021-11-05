@@ -49,8 +49,7 @@ if __name__ == '__main__':
     stream_handler = logging.StreamHandler(sys.stdout)
     file_handler.setLevel(logging.DEBUG)
     stream_handler.setLevel(logging.INFO)
-    logging.basicConfig(format="%(message)s",
-                        handlers=[file_handler, stream_handler], level=logging.DEBUG)
+    logging.basicConfig(format="%(message)s", handlers=[file_handler, stream_handler], level=logging.DEBUG)
 
     from agent import Agent
     from learners import ReinforcementLearner, DQNLearner, \
