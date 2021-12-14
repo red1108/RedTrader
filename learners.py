@@ -435,6 +435,43 @@ class DQNLearner(ReinforcementLearner):
         return x, y_value, None
 
 
+class RainbowDQNLearner(DQNLearner):
+    def __init__(self, *args, value_network_path=None, n_step=1, **kwargs):
+        super().__init__(*args, value_network_path = value_network_path, **kwargs)
+        self.n_step = n_step
+
+    def get_batch(self):
+        memory = zip(
+            reversed(self.memory_sample),
+            reversed(self.memory_action),
+            reversed(self.memory_value),
+            reversed(self.memory_reward),
+        )
+        x = np.zeros((len(self.memory_sample), self.num_steps, self.num_features))
+        y_value = np.zeros((len(self.memory_sample), self.agent.NUM_ACTIONS))
+        value_max_list = []
+        reward_list = []
+
+        for i, (sample, action, value, reward) in enumerate(memory):
+            x[i] = sample
+            reward_list.append(self.memory_reward[-1] - reward)
+            value_max_list.append(value.max())
+            if len(reward_list) > self.n_step :
+                reward_list.pop(0)
+            if len(value_max_list) > self.n_step + 1:
+                value_max_list.pop(0)
+            r = 0
+            for j in range(0, len(reward_list)-1):
+                r = r + reward_list[-1-j]*(self.discount_factor**j)
+            future_value_max = 0
+            if len(value_max_list) > self.n_step :
+                future_value_max = value_max_list[0]
+
+            y_value[i] = value
+            y_value[i, action] = r + (self.discount_factor**self.n_step) * future_value_max
+        return x, y_value, None
+
+
 class PolicyGradientLearner(ReinforcementLearner):
     def __init__(self, *args, policy_network_path=None, **kwargs):
         super().__init__(*args, **kwargs)

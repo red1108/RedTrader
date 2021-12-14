@@ -11,7 +11,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--stock_code', nargs='+')
     parser.add_argument('--ver', choices=['v1', 'v2', 'v3'], default='v3')
-    parser.add_argument('--rl_method', choices=['dqn', 'pg', 'ac', 'a2c', 'a3c', 'monkey'])
+    parser.add_argument('--rl_method', choices=['dqn', 'rainbow', 'pg', 'ac', 'a2c', 'a3c', 'monkey'])
     parser.add_argument('--net', choices=['dnn', 'lstm', 'cnn', 'monkey'], default='dnn')
     parser.add_argument('--num_steps', type=int, default=1)
     parser.add_argument('--lr', type=float, default=0.001)
@@ -27,6 +27,7 @@ if __name__ == '__main__':
     parser.add_argument('--learning', action='store_true')
     parser.add_argument('--start_date', default='20200101')
     parser.add_argument('--end_date', default='20201231')
+    parser.add_argument('--n_step', type=int, default=1)
     args = parser.parse_args()
 
     # 백엔드 뭐로쓸지 설정.
@@ -52,7 +53,7 @@ if __name__ == '__main__':
     logging.basicConfig(format="%(message)s", handlers=[file_handler, stream_handler], level=logging.DEBUG)
 
     from agent import Agent
-    from learners import ReinforcementLearner, DQNLearner, \
+    from learners import ReinforcementLearner, DQNLearner, RainbowDQNLearner, \
         PolicyGradientLearner, ActorCriticLearner, A2CLearner, A3CLearner
 
     # 모델 경로 준비
@@ -102,6 +103,11 @@ if __name__ == '__main__':
             if args.rl_method == 'dqn':
                 learner = DQNLearner(**{**common_params,
                                         'value_network_path': value_network_path})
+            elif args.rl_method == 'rainbow':
+                learner = RainbowDQNLearner(**{**common_params,
+                                        'value_network_path': value_network_path,
+                                        'n_step': args.n_step})
+
             elif args.rl_method == 'pg':
                 learner = PolicyGradientLearner(**{**common_params,
                                                    'policy_network_path': policy_network_path})
