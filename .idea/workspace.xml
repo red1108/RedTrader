@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="adf8e8e4-fce5-4e12-adc1-4fba04e80086" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/RedTrader.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RedTrader.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/learners.py" beforeDir="false" afterPath="$PROJECT_DIR$/learners.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +58,7 @@
       <workItem from="1637211198849" duration="5000" />
       <workItem from="1637684864673" duration="13000" />
       <workItem from="1637950010588" duration="3000" />
-      <workItem from="1639458955708" duration="2443000" />
+      <workItem from="1639458955708" duration="4382000" />
     </task>
     <servers />
   </component>
